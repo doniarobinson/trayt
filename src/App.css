@@ -1,6 +1,13 @@
+:root {
+  --primary-color: #004990;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
 .App {
-  display: flex;
-  flex-wrap: wrap;
   font-family: Roboto;
   font-size: 16px;
   font-style: normal;
@@ -8,25 +15,46 @@
   line-height: normal;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .header {
+  display: flex;
+  align-items: stretch;
+  background: var(--primary-color);
+  height: 50px;
   flex: 1 0 100%;
-  background: #004990;
+}
+
+nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .header ul {
-  list-style-type: none;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  list-style-type: none;
+  color: #fff;
 }
 
 .header li {
-  color: #fff;
   padding-right: 20px;
 }
 
 .sidebar {
   flex: 0 0 250px;
   background: #f0f0f0;
+  padding-left: 10px;
 }
 
 .sidebar ul {
@@ -37,6 +65,65 @@
   padding: 8px 0;
 }
 
-.main {
+.content {
   flex: 1;
+  padding: 15px;
+}
+
+.content__inner {
+  text-align: center;
+}
+
+.welcome {
+  color: var(--primary-color);
+  font-size: 40px;
+  font-weight: 400;
+}
+
+.initiate {
+  color: var(--primary-color);
+  font-size: 32px;
+  font-weight: 400;
+}
+
+@media (min-width: 768px) {
+  .welcome {
+    margin-bottom: 120px;
+  }
+
+  .initiate {
+    margin-bottom: 85px;
+  }
+
+  .enroll {
+    margin-top: 20px;
+  }
+}
+
+.btn {
+  background: #005cc5;
+  color: white;
+  border: 0;
+  padding: 10px 50px;
+}
+
+.container__form-enroll {
+  margin: 0 auto;
+  width: 480px;
+  padding: 40px;
+  background: #f3f3f3;
+}
+
+.container__form-enroll label {
+  color: #003f5d;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.enroll {
+  margin-top: 130px;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-size: 28px;
+  font-weight: 400;
 }
