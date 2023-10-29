@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Enroll() {
   const defaultForm = {
@@ -14,11 +14,12 @@ export default function Enroll() {
     routingValid: false,
     amountValid: false,
     frequencyValid: false,
-    entireFormValid: false,
   };
 
   const [form, setForm] = useState(defaultForm);
   const [formValid, setFormValid] = useState(defaultFormValid);
+
+  const navigate = useNavigate();
 
   function handleInput(e) {
     const name = e.target.name;
@@ -27,7 +28,8 @@ export default function Enroll() {
     setForm({ ...form, [name]: value });
   }
 
-  function validateForm() {
+  function handleSubmit(e) {
+    e.preventDefault();
     let tmpAccountValid = false;
     let tmpRoutingValid = false;
     let tmpAmountValid = false;
@@ -90,99 +92,93 @@ export default function Enroll() {
       routingValid: tmpRoutingValid,
       amountValid: tmpAmountValid,
       frequenceValid: tmpFrequencyValid,
-      entireFormValid:
-        tmpAccountValid &&
-        tmpRoutingValid &&
-        tmpAmountValid &&
-        tmpFrequencyValid,
     });
+
+    if (
+      tmpAccountValid &&
+      tmpRoutingValid &&
+      tmpAmountValid &&
+      tmpFrequencyValid
+    ) {
+      navigate("/calculator");
+    }
   }
 
   return (
     <div className="content__inner">
-      <h1 className="enroll">New Direct Deposit Enrollment</h1>
+      <h1 className="h1-small">New Direct Deposit Enrollment</h1>
 
-      <div className="container__form-enroll">
-        <label htmlFor="account">Account Number:</label>
-        <input
-          type="number"
-          id="account"
-          name="account"
-          value={form.account}
-          onChange={(event) => {
-            handleInput(event);
-          }}
-        />
+      <form onSubmit={handleSubmit}>
+        <div className="container__form-enroll">
+          <label htmlFor="account">Account Number:</label>
+          <input
+            type="number"
+            id="account"
+            name="account"
+            value={form.account}
+            onChange={(event) => {
+              handleInput(event);
+            }}
+          />
 
-        <label htmlFor="routing">Routing Number:</label>
+          <label htmlFor="routing">Routing Number:</label>
 
-        <input
-          type="number"
-          id="routing"
-          name="routing"
-          value={form.routing}
-          onChange={(event) => {
-            handleInput(event);
-          }}
-        />
+          <input
+            type="number"
+            id="routing"
+            name="routing"
+            value={form.routing}
+            onChange={(event) => {
+              handleInput(event);
+            }}
+          />
 
-        <label htmlFor="amount">Amount (in USD):</label>
-        <input
-          type="number"
-          id="amount"
-          name="amount"
-          min="1"
-          step=".01"
-          value={form.amount}
-          onChange={(event) => {
-            handleInput(event);
-          }}
-        />
+          <label htmlFor="amount">Amount (in USD):</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            min="1"
+            step=".01"
+            value={form.amount}
+            onChange={(event) => {
+              handleInput(event);
+            }}
+          />
 
-        <label htmlFor="frequency">Select Frequency:</label>
-        <select
-          id="frequency"
-          name="frequency"
-          value={form.frequency}
-          onChange={(event) => {
-            handleInput(event);
-          }}
-        >
-          <option value=""></option>
-          <option value="once">Once per month</option>
-          <option value="twice">Twice per month</option>
-        </select>
+          <label htmlFor="frequency">Select Frequency:</label>
+          <select
+            id="frequency"
+            name="frequency"
+            value={form.frequency}
+            onChange={(event) => {
+              handleInput(event);
+            }}
+          >
+            <option value=""></option>
+            <option value="once">Once per month</option>
+            <option value="twice">Twice per month</option>
+          </select>
 
-        {/* TODO (if more time): give the user a visual error message for each field with an error  */}
+          {/* TODO (if more time): give the user a visual error message for each field with an error  */}
 
-        {formValid.entireFormValid ? (
-          <p className="success">Form is valid!</p>
-        ) : (
-          <p className="error">Form is not valid!</p>
-        )}
+          {formValid.tmpAccountValid &&
+          formValid.tmpRoutingValid &&
+          formValid.tmpAmountValid &&
+          formValid.tmpFrequencyValid ? (
+            <p className="success">Form is valid!</p>
+          ) : (
+            <p className="error">Form is not valid!</p>
+          )}
 
-        {/* I have two buttons for a reason, promise! */}
-        <div className="container__btn">
-          <button className="btn-form" onClick={validateForm}>
-            Submit
-          </button>
+          {/* I have two buttons for a reason, promise! */}
+          <div className="container__btn">
+            <button className="btn-form" type="submit">
+              Submit
+            </button>
+          </div>
         </div>
-
-        <div className="container__btn">
-          <Link to={"/calculator"}>
-            <button className="btn-form">Submit and Move to Next Page</button>
-          </Link>
-        </div>
-      </div>
+      </form>
     </div>
   );
 }
-
-/* 
-routing - The first two digits of a routing number must be in the ranges 00 through 12, 21 through 32, 61 through 72, or 80
-Amount - us dollars
-Frequency - dropdown - Twice per Month or Once per Month
-Submit - button
-
-
-*/

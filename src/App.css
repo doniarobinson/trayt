@@ -104,7 +104,7 @@ nav {
 .container__btn {
   flex: 1 0 100%;
   text-align: center;
-  padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 .btn-form {
@@ -115,7 +115,7 @@ nav {
   padding: 10px 20px;
 }
 
-.enroll {
+.h1-small {
   margin-top: 20px;
   margin-bottom: 15px;
   color: var(--primary-color);
@@ -125,6 +125,10 @@ nav {
   text-align: center;
 }
 
+form {
+  display: flex;
+}
+
 .container__form-enroll {
   flex: 0 1 480px;
   display: flex;
@@ -132,6 +136,14 @@ nav {
   margin: 0 auto;
   padding: 40px;
   background: #f3f3f3;
+}
+
+.container__form-calculator {
+  flex: 0 1 480px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  padding: 40px;
 }
 
 .container__form-enroll label {
@@ -157,6 +169,14 @@ select {
 
 .success {
   color: green;
+}
+
+.interest {
+  color: black;
+  font-size: 96px;
+  flex: 1 0 100%;
+  text-align: center;
+  padding-top: 60px;
 }
 
 @media (min-width: 768px) {
