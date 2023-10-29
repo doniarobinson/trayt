@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Enroll() {
   const defaultForm = {
     account: "",
     routing: "",
-    isValid: false,
+    amount: "",
+    frequency: "",
   };
 
-  const [form, setForm] = React.useState(defaultForm);
+  const defaultFormValid = {
+    accountValid: false,
+    routingValid: false,
+    amountValid: false,
+    frequencyValid: false,
+    entireFormValid: false,
+  };
+
+  const [form, setForm] = useState(defaultForm);
+  const [formValid, setFormValid] = useState(defaultFormValid);
 
   function handleInput(e) {
     const name = e.target.name;
@@ -16,64 +27,161 @@ export default function Enroll() {
     setForm({ ...form, [name]: value });
   }
 
-  function validateField() {
-    console.log("hi");
-  }
+  function validateForm() {
+    let tmpAccountValid = false;
+    let tmpRoutingValid = false;
+    let tmpAmountValid = false;
+    let tmpFrequencyValid = false;
 
-  React.useEffect(() => {
-    validateField();
-  }, [form]);
+    // loop through form fields, check validity
+    Object.entries(form).forEach(([key, val]) => {
+      switch (key) {
+        case "account":
+          const accountString = val.toString();
+          if (accountString.length >= 8 && accountString.length <= 17) {
+            tmpAccountValid = true;
+          } else {
+            tmpAccountValid = false;
+          }
+          // in the future, we can set an error message here
+          break;
+        case "routing":
+          // check for the entire number being in between certain ranges
+          //The first two digits of a routing number must be in the ranges 00 through 12, 21 through 32, 61 through 72, or 80
+
+          const routingString = val.toString();
+          if (routingString.length === 9) {
+            // check the first digit; if it
+            const firstTwoDigits = parseInt(routingString.slice(0, 2));
+            console.log(firstTwoDigits);
+            if (
+              (firstTwoDigits >= 0 && firstTwoDigits <= 12) ||
+              (firstTwoDigits >= 21 && firstTwoDigits <= 32) ||
+              (firstTwoDigits >= 61 && firstTwoDigits <= 72) ||
+              firstTwoDigits === 80
+            ) {
+              tmpRoutingValid = true;
+            } else {
+              tmpRoutingValid = false;
+            }
+          }
+          // in the future, we can set an error message here
+          break;
+        case "amount":
+          if (val > 0) {
+            tmpAmountValid = true;
+          } else {
+            tmpAmountValid = false;
+          }
+          // in the future, we can set an error message here
+          break;
+        case "frequency":
+          tmpFrequencyValid = val !== "";
+          // in the future, we can set an error message here
+          break;
+        default:
+          break;
+      }
+    });
+
+    // set them all at once
+    setFormValid({
+      accountValid: tmpAccountValid,
+      routingValid: tmpRoutingValid,
+      amountValid: tmpAmountValid,
+      frequenceValid: tmpFrequencyValid,
+      entireFormValid:
+        tmpAccountValid &&
+        tmpRoutingValid &&
+        tmpAmountValid &&
+        tmpFrequencyValid,
+    });
+  }
 
   return (
     <div className="content__inner">
       <h1 className="enroll">New Direct Deposit Enrollment</h1>
 
       <div className="container__form-enroll">
-        <div></div>
         <label htmlFor="account">Account Number:</label>
-        <br />
-
         <input
           type="number"
           id="account"
           name="account"
-          required
-          minLength="8"
-          maxLength="17"
           value={form.account}
           onChange={(event) => {
             handleInput(event);
           }}
         />
-        <br />
-        <label htmlFor="account">Routing Number:</label>
-        <br />
+
+        <label htmlFor="routing">Routing Number:</label>
 
         <input
           type="number"
           id="routing"
           name="routing"
-          required
-          min="100000000"
-          max="999999999"
           value={form.routing}
           onChange={(event) => {
             handleInput(event);
           }}
         />
-        <br />
-        <button className="btn" disabled={!form.isValid}>
-          Submit
-        </button>
+
+        <label htmlFor="amount">Amount (in USD):</label>
+        <input
+          type="number"
+          id="amount"
+          name="amount"
+          min="1"
+          step=".01"
+          value={form.amount}
+          onChange={(event) => {
+            handleInput(event);
+          }}
+        />
+
+        <label htmlFor="frequency">Select Frequency:</label>
+        <select
+          id="frequency"
+          name="frequency"
+          value={form.frequency}
+          onChange={(event) => {
+            handleInput(event);
+          }}
+        >
+          <option value=""></option>
+          <option value="once">Once per month</option>
+          <option value="twice">Twice per month</option>
+        </select>
+
+        {/* TODO (if more time): give the user a visual error message for each field with an error  */}
+
+        {formValid.entireFormValid ? (
+          <p className="success">Form is valid!</p>
+        ) : (
+          <p className="error">Form is not valid!</p>
+        )}
+
+        {/* I have two buttons for a reason, promise! */}
+        <div className="container__btn">
+          <button className="btn-form" onClick={validateForm}>
+            Submit
+          </button>
+        </div>
+
+        <div className="container__btn">
+          <Link to={"/calculator"}>
+            <button className="btn-form">Submit and Move to Next Page</button>
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
 
 /* 
-Routing Number
-Amount
-Frequency - dropdown
+routing - The first two digits of a routing number must be in the ranges 00 through 12, 21 through 32, 61 through 72, or 80
+Amount - us dollars
+Frequency - dropdown - Twice per Month or Once per Month
 Submit - button
 
 

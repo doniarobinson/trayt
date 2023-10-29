@@ -5,16 +5,3 @@ export default function Calculator() {
     </div>
   );
 }
-
-/*
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              */
