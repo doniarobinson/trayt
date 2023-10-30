@@ -139,7 +139,7 @@ form {
 }
 
 .container__form-calculator {
-  flex: 0 1 480px;
+  flex: 0;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
